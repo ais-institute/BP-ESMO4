@@ -22,34 +22,13 @@
         h1 {
             font-weight: 800;
         }
-        
-        .judul-hitam {
-            color: #222222;
-        }
-        
-        .huruf-e {
-            color: #2196F3;
-        }
-        
-        .huruf-s {
-            color: #E53935;
-        }
-        
-        .huruf-m {
-            color: #F9C80E;
-        }
-        
-        .huruf-o {
-            color: #43A047;
-        }
-        
-        .huruf-strip {
-            color: #222222;
-        }
-        
-        .huruf-4 {
-            color: #43A047;
-        }
+        .judul-hitam { color: #222222; }
+        .huruf-e { color: #2196F3; }
+        .huruf-s { color: #E53935; }
+        .huruf-m { color: #F9C80E; }
+        .huruf-o { color: #43A047; }
+        .huruf-strip { color: #222222; }
+        .huruf-4 { color: #43A047; }
         
         input[type="text"] {
             width: 80%;
@@ -95,7 +74,7 @@
             margin-top: 25px;
             font-size: 16px;
         }
-        .info-detail, .info-schedule {
+        .info-detail {
             margin: 5px 0;
             font-size: 14px;
         }
@@ -141,12 +120,11 @@
             📐 MATH: 07.30-08.30 WIB
         </div>
         <div class="info-detail">
-            🔤 ENGLISH:  09.00-10.00 WIB
+            🔤 ENGLISH: 09.00-10.00 WIB
         </div>
         <div class="info-detail">
             🧬 SAINS: 10.30-11.30 WIB
         </div>
-       
 
         <!-- Tombol / Link Juknis -->
         <a href="https://drive.google.com/file/d/1ISxjnsCbZMgZnh6PXyk79rlYLAMazQYQ/view?usp=sharing" 
@@ -180,7 +158,8 @@ async function loadData() {
             .filter(row => row.trim() !== "");
 
         dataPeserta = rows.slice(1).map(row => {
-            const values = row.split(",");
+            // Menggunakan titik koma (;) sesuai dengan file CSV Anda
+            const values = row.split(";");
 
             return {
                 id: values[0]?.trim() || "",
@@ -191,15 +170,15 @@ async function loadData() {
             };
         });
 
+        console.log("Data berhasil dimuat:", dataPeserta.length, "peserta");
+
     } catch (error) {
         console.error("CSV tidak dapat dibaca:", error);
     }
 }
 
-
 // Pencarian nama secara otomatis
 document.getElementById("searchInput").addEventListener("input", function () {
-
     const input = this.value.trim().toLowerCase();
     const saran = document.getElementById("saranNama");
 
@@ -214,9 +193,7 @@ document.getElementById("searchInput").addEventListener("input", function () {
     );
 
     hasilPencarian.slice(0, 10).forEach(peserta => {
-
         const div = document.createElement("div");
-
         div.className = "saran-item";
 
         div.innerHTML = `
@@ -226,11 +203,8 @@ document.getElementById("searchInput").addEventListener("input", function () {
         `;
 
         div.onclick = function () {
-
             document.getElementById("searchInput").value = peserta.nama;
-
             saran.innerHTML = "";
-
             tampilkanData(peserta);
         };
 
@@ -246,33 +220,24 @@ document.getElementById("searchInput").addEventListener("input", function () {
     }
 });
 
-
 // Menampilkan data peserta
 function tampilkanData(peserta) {
-
     const hasil = document.getElementById("hasil");
 
     hasil.innerHTML = `
         <div class="hasil-data" style="margin-top:20px; text-align:left; background:#eef7ff; padding:15px; border-radius:8px;">
             <h2 style="font-size:18px; margin-top:0;">🎉 Data Peserta Ditemukan</h2>
-
             <p>🆔 <strong>ID Peserta:</strong> ${peserta.id}</p>
-
             <p>👤 <strong>Nama:</strong> ${peserta.nama}</p>
-
             <p>🏫 <strong>Asal Sekolah:</strong> ${peserta.sekolah}</p>
-
             <p>📚 <strong>Level:</strong> ${peserta.level}</p>
-
-            <p>🏆 <strong>Mapel:</strong> ${peserta.mapel}</p>
+            <p>🏆 1<strong>Mapel:</strong> ${peserta.mapel}</p>
         </div>
     `;
 }
 
-
 // Tombol Cari Data
 function cariData() {
-
     const input = document
         .getElementById("searchInput")
         .value
@@ -292,10 +257,8 @@ function cariData() {
     }
 }
 
-
 // Jalankan pembacaan CSV
 loadData();
-    
 </script>
 </body>
 </html>
