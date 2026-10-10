@@ -1,1 +1,301 @@
-BABAK PENYISIHAN
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BABAK PENYISIHAN ESMO 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f6f9;
+            padding: 50px 20px;
+        }
+        .container {
+            background: white;
+            max-width: 500px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-weight: 800;
+        }
+        
+        .judul-hitam {
+            color: #222222;
+        }
+        
+        .huruf-e {
+            color: #2196F3;
+        }
+        
+        .huruf-s {
+            color: #E53935;
+        }
+        
+        .huruf-m {
+            color: #F9C80E;
+        }
+        
+        .huruf-o {
+            color: #43A047;
+        }
+        
+        .huruf-strip {
+            color: #222222;
+        }
+        
+        .huruf-4 {
+            color: #43A047;
+        }
+        
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin-top: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #saranNama {
+            width: 80%;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .saran-item {
+            background: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-top: none;
+            cursor: pointer;
+        }
+
+        .saran-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .info-title {
+            font-weight: bold;
+            margin-top: 25px;
+            font-size: 16px;
+        }
+        .info-detail, .info-schedule {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .btn-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn-link:hover {
+            background-color: #218838;
+        }
+        .deadline, .contact {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>
+            <span class="judul-hitam">BABAK PENYISIHAN</span><br>
+            <span class="huruf-e">E</span><span class="huruf-s">S</span><span class="huruf-m">M</span><span class="huruf-o">O</span><span class="huruf-strip">-</span><span class="huruf-4">4</span>
+        </h1>
+        <p>Masukkan Nama Peserta:</p>
+        <input type="text" id="searchInput" placeholder="Contoh: AZALEA">
+        <div id="saranNama"></div>
+        <br>
+        <button onclick="cariData()">Cari Data</button>
+        
+        <div id="hasil"></div>
+
+        <!-- Info Babak Penyisihan -->
+        <div class="info-title">
+            🥇✨ JADWAL PENYISIHAN ESMO4 PER MAPEL ✨🥇
+        </div>
+        <div class="info-detail">
+            📐 MATH: 07.30-08.30 WIB
+        </div>
+        <div class="info-detail">
+            🔤 ENGLISH:  09.00-10.00 WIB
+        </div>
+        <div class="info-detail">
+            🧬 SAINS: 10.30-11.30 WIB
+        </div>
+       
+
+        <!-- Tombol / Link Juknis -->
+        <a href="https://drive.google.com/file/d/1ISxjnsCbZMgZnh6PXyk79rlYLAMazQYQ/view?usp=sharing" 
+           class="btn-link" 
+           target="_blank">
+           📄 Baca Juknis BP ESMO4
+        </a>
+
+        <!-- Contact Person -->
+        <div class="deadline">
+            <strong>Admin Pendaftaran:</strong><br>
+            Miss Khusnul (0822-4591-8339)
+        </div>
+        <div class="contact">
+            <strong>Operator Sistem:</strong><br>
+            Miss Yuni (0858-1533-0554)
+        </div>
+    </div>
+
+<script>
+let dataPeserta = [];
+
+// Membaca data CSV saat halaman dibuka
+async function loadData() {
+    try {
+        const response = await fetch("BP2024.csv");
+        const csvText = await response.text();
+
+        const rows = csvText
+            .split(/\r?\n/)
+            .filter(row => row.trim() !== "");
+
+        dataPeserta = rows.slice(1).map(row => {
+            const values = row.split(",");
+
+            return {
+                id: values[0]?.trim() || "",
+                nama: values[1]?.trim() || "",
+                sekolah: values[2]?.trim() || "",
+                level: values[3]?.trim() || "",
+                mapel: values[4]?.trim() || ""
+            };
+        });
+
+    } catch (error) {
+        console.error("CSV tidak dapat dibaca:", error);
+    }
+}
+
+
+// Pencarian nama secara otomatis
+document.getElementById("searchInput").addEventListener("input", function () {
+
+    const input = this.value.trim().toLowerCase();
+    const saran = document.getElementById("saranNama");
+
+    saran.innerHTML = "";
+
+    if (!input) {
+        return;
+    }
+
+    const hasilPencarian = dataPeserta.filter(item =>
+        item.nama.toLowerCase().includes(input)
+    );
+
+    hasilPencarian.slice(0, 10).forEach(peserta => {
+
+        const div = document.createElement("div");
+
+        div.className = "saran-item";
+
+        div.innerHTML = `
+            👤 <strong>${peserta.nama}</strong>
+            <br>
+            <small>${peserta.sekolah}</small>
+        `;
+
+        div.onclick = function () {
+
+            document.getElementById("searchInput").value = peserta.nama;
+
+            saran.innerHTML = "";
+
+            tampilkanData(peserta);
+        };
+
+        saran.appendChild(div);
+    });
+
+    if (hasilPencarian.length === 0) {
+        saran.innerHTML = `
+            <div class="saran-item">
+                ❌ Nama tidak ditemukan
+            </div>
+        `;
+    }
+});
+
+
+// Menampilkan data peserta
+function tampilkanData(peserta) {
+
+    const hasil = document.getElementById("hasil");
+
+    hasil.innerHTML = `
+        <div class="hasil-data" style="margin-top:20px; text-align:left; background:#eef7ff; padding:15px; border-radius:8px;">
+            <h2 style="font-size:18px; margin-top:0;">🎉 Data Peserta Ditemukan</h2>
+
+            <p>🆔 <strong>ID Peserta:</strong> ${peserta.id}</p>
+
+            <p>👤 <strong>Nama:</strong> ${peserta.nama}</p>
+
+            <p>🏫 <strong>Asal Sekolah:</strong> ${peserta.sekolah}</p>
+
+            <p>📚 <strong>Level:</strong> ${peserta.level}</p>
+
+            <p>🏆 <strong>Mapel:</strong> ${peserta.mapel}</p>
+        </div>
+    `;
+}
+
+
+// Tombol Cari Data
+function cariData() {
+
+    const input = document
+        .getElementById("searchInput")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const peserta = dataPeserta.find(item =>
+        item.nama.toLowerCase() === input ||
+        item.id.toLowerCase() === input
+    );
+
+    if (peserta) {
+        tampilkanData(peserta);
+    } else {
+        document.getElementById("hasil").innerHTML =
+            "<p style='color:red; margin-top:15px;'>❌ Data peserta tidak ditemukan.</p>";
+    }
+}
+
+
+// Jalankan pembacaan CSV
+loadData();
+    
+</script>
+</body>
+</html>
